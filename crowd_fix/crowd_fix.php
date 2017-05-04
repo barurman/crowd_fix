@@ -66,6 +66,7 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-crowd_fix.php';
  *
  * @since    1.0.0
  */
+
 function run_crowd_fix() {
 	
 	$plugin = new Crowd_fix();
