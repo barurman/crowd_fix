@@ -2,17 +2,7 @@
 
 require_once( ABSPATH . "wp-includes/pluggable.php" ); // Что бы все работало и в плагине
 
-
-
-
 function ajax_auth_init(){
-
-
-
-
-
-  
-
     // Enable the user with no privileges to run ajax_login() in AJAX
     add_action( 'wp_ajax_nopriv_ajaxlogin', 'ajax_login' );
 	// Enable the user with no privileges to run ajax_register() in AJAX
@@ -79,7 +69,7 @@ function auth_user_login($user_login, $password, $login)
 		echo json_encode(array('loggedin'=>false, 'message'=>__('Имя пользователя или пароль неверны')));
     } else {
 		wp_set_current_user($user_signon->ID); 
-        echo json_encode(array('loggedin'=>true, 'message'=>__($login.'Вы успешно зарегестрировались')));
+        echo json_encode(array('loggedin'=>true, 'message'=>__('Вы успешно авторизировались')));
     }
 	
 	die();

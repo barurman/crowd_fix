@@ -249,12 +249,11 @@ class Crowd_fix
             if ($login_page_id && $acc_page_id) :
 
 
-                if (is_page('my-account') || is_page('cf-dashboard') ) {
+                if (is_page('dashboard') || is_page('cf-dashboard') || is_page('customer-logout')  ) {
 
                     wp_redirect(get_the_permalink($acc_page_id));
                     exit;
                 }
-
 
                 if (is_user_logged_in()) {
                     if (is_page('login')) {
@@ -267,12 +266,73 @@ class Crowd_fix
                         exit;
                     }
                 }
-
-
-
             endif; // $login_page_id && $acc_page_id
 
         });
+
+
+        // Добавим новое поле VK для юзера
+
+        add_action( 'show_user_profile', 'my_show_extra_profile_fields' );
+        add_action( 'edit_user_profile', 'my_show_extra_profile_fields' );
+
+        function my_show_extra_profile_fields( $user ) { ?>
+
+            <h3>Дополнительные поля (Crowdfix)</h3>
+
+            <table class="form-table">
+
+                <tr>
+                    <th><label for="VK">Вконтакте</label></th>
+
+                    <td>
+                        <input type="text" name="vk" id="vk" value="<?php echo esc_attr( get_the_author_meta( 'vk', $user->ID ) ); ?>" class="regular-text" /><br />
+                        <span class="description">Ссылка на страницу Вконтакте</span>
+                    </td>
+                </tr>
+
+            </table>
+        <?php }
+
+
+
+        // Добавляем поле VK
+
+        add_action( 'personal_options_update', 'my_save_extra_profile_fields' );
+        add_action( 'edit_user_profile_update', 'my_save_extra_profile_fields' );
+
+        function my_save_extra_profile_fields( $user_id ) {
+
+            if ( !current_user_can( 'edit_user', $user_id ) )
+                return false;
+
+            /* Copy and paste this line for additional fields. Make sure to change 'twitter' to the field ID. */
+            update_usermeta( $user_id, 'vk', $_POST['vk'] );
+        }
+
+
+
+
+        function debug_to_console( $data ) {
+            $output = $data;
+            if ( is_array( $output ) )
+                $output = implode( ',', $output);
+
+            echo "<script>console.log( 'Debug Objects: " . $output . "' );</script>";
+        }
+
+        // Добавляем хук VK
+        add_action( 'wpneo_crowdfunding_after_save_dashboard', 'wpneo_dashboard_form_save_vk');
+
+        function wpneo_dashboard_form_save_vk(){
+          //  debug_to_console( 'работает' );
+            $id  =  get_current_user_id();
+            $vk  =  sanitize_text_field($_POST['vk']);
+
+            update_usermeta( $id, 'vk', $vk  );
+
+        }
+
 
         // логин page шаблон
 //        add_filter('page_template', 'wpa3396_page_template');
@@ -297,3 +357,4 @@ class Crowd_fix
 
 
 }
+

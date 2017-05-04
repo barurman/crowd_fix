@@ -27,7 +27,7 @@ function insert_my_footer() {
 	<button id="pop_login">Логин</button>
 	<button href="#" id="pop_signup">Регистрация</button>
 	<?
-	//include "partials/login/ajax-auth.php";
+	include "partials/login/ajax-auth.php";
 	?>
 	<script src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js"></script>
 	<script src="//yastatic.net/share2/share.js"></script>
@@ -109,7 +109,9 @@ class Crowd_fix_Public {
 		 * class.
 		 */
 
+		wp_enqueue_style( $this->plugin_name . 'formstyler', plugin_dir_url( __FILE__ ) . 'css/jquery.formstyler.css', array(), $this->version, 'all' );
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/crowd_fix-public.css', array(), $this->version, 'all' );
+
 
 	}
 
@@ -133,10 +135,16 @@ class Crowd_fix_Public {
 		 * class.
 		 */
 
-		wp_register_script('validate-script', plugin_dir_url( __FILE__ ) . '/js/jquery.validate.js', array('jquery') );
+		wp_register_script('validate-script', plugin_dir_url( __FILE__ ) . 'js/jquery.validate.js', array('jquery') );
 		wp_enqueue_script('validate-script');
 
-		wp_register_script('ajax-auth-script', plugin_dir_url( __FILE__ ) . 'js/crowd_fix-public.js', array('jquery') );
+
+		wp_register_script('formstyler', plugin_dir_url( __FILE__ ) . 'js/jquery.formstyler.min.js', array('validate-script') );
+		wp_enqueue_script('formstyler');
+
+
+
+		wp_register_script('ajax-auth-script', plugin_dir_url( __FILE__ ) . 'js/crowd_fix-public.js', array('formstyler') );
 		wp_enqueue_script('ajax-auth-script');
 
 
@@ -146,8 +154,7 @@ class Crowd_fix_Public {
 			'loadingmessage' => __('Sending user info, please wait...')
 		));
 
-		 wp_enqueue_script( $this->plugin_name . "libs" , plugin_dir_url( __FILE__ ) . 'js/jquery.validate.js', array( 'jquery' ), $this->version, false );
-
+//		 wp_enqueue_script( $this->plugin_name . "libs" , plugin_dir_url( __FILE__ ) . 'js/jquery.validate.js', array( 'jquery' ), $this->version, false );
 
 	}
 

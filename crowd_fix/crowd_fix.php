@@ -13,7 +13,7 @@
  * @package           Crowd_fix
  *
  * @wordpress-plugin
- * Plugin Name:       CrowdFix
+ * Plugin Name:       DevCrowd
  * Plugin URI:        http://devdigital.pro
  * Description:       Плагин содержит исправления для темы Crowdfunding
  * Version:           1.0.0
